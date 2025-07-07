@@ -1,42 +1,21 @@
-import {UserEmail} from "./userEmail";
-import {UserName} from "./UserName";
-import {UserId} from "./userId";
-import {UserPhone} from "./userPhone";
-import {UserPassword} from "./userPassword";
-import {UserBirthDate} from "./userBirthDate";
-import {UserCreateDate} from "./userCreateDate";
-import {UserRol} from "./userRol";
+import { UserId } from './userId';
+import { UserName } from './userName';
+import { UserEmail } from './userEmail';
+import { UserPhone } from './userPhone';
+import { UserPassword } from './userPassword';
+import { UserBirthDate } from './userBirthDate';
+import { UserCreateDate } from './userCreateDate';
+import { UserRol } from './userRol';
 
-export  class User {
-  _id: UserId;
-  name: UserName;
-  email: UserEmail;
-  phone: UserPhone;
-  password: UserPassword;
-  birthDate: UserBirthDate;
-  createDate: UserCreateDate;
-  role: UserRol;
-  clubId: string;
-
+export class User {
   constructor(
-    _id: UserId,
-    name: UserName,
-    email: UserEmail,
-    phone: UserPhone,
-    password: UserPassword,
-    birthDate: UserBirthDate,
-    createDate: UserCreateDate,
-    role: UserRol,
-    clubId: string
-  ) {
-    this._id = _id;
-    this.name = name;
-    this.email = email;
-    this.phone = phone;
-    this.password = password;
-    this.birthDate = birthDate;
-    this.createDate = createDate;
-    this.role = role;
-    this.clubId = clubId
-  }
+    public name: UserName,
+    public email: UserEmail,
+    public phone: UserPhone,
+    public password: UserPassword,
+    public birthDate: UserBirthDate,
+    public createDate: UserCreateDate,
+    public role: UserRol,
+    public readonly _id?: UserId
+  ) {}
 }
