@@ -1,5 +1,5 @@
 export class ClubId {
-value: string
+  value: string
   constructor(
     value: string
   ) {

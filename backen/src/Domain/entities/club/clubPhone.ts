@@ -1,8 +1,8 @@
 export class ClubPhone {
-value: string
+  value: string
   constructor(
     value: string
-  ) {
+  ){
     this.value = value
   }
 }

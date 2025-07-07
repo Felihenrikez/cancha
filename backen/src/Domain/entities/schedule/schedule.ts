@@ -1,14 +1,31 @@
-export interface ISchedule {
-  id: string;
-  date: Date;
-  startTime: string;
-  endTime: string;
-  isAvailable: boolean;
-  pitchId: string;
-}
-export class Schedule{
+import {ScheduleId} from "./scheduleId";
+import {FieldId} from "../field/fieldId";
+import {ScheduleDate} from "./scheduleDate";
+import {ScheduleStartTime} from "./scheduleStartTime";
+import {ScheduleEndTime} from "./scheduleEndTime";
+import {ScheduleIsAvalable} from "./scheduleIsAvalable";
+
+export class ISchedule {
+  _id: ScheduleId;
+  fieldId: FieldId;
+  date: ScheduleDate;
+  startTime: ScheduleStartTime;
+  endTime: ScheduleEndTime;
+  isAvailable: ScheduleIsAvalable;
+
   constructor(
-    private readonly id: string,
-    private readonly props: ISchedule
-    ) {}
+      _id: ScheduleId,
+      fieldId: FieldId,
+      date: ScheduleDate,
+      startTime: ScheduleStartTime,
+      endTime: ScheduleEndTime,
+      isAvailable: ScheduleIsAvalable
+  ) {
+    this._id = _id;
+    this.fieldId = fieldId;
+    this.date = date;
+    this.startTime = startTime;
+    this.endTime = endTime;
+    this.isAvailable = isAvailable
+  }
 }

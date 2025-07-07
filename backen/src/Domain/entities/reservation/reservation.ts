@@ -1,15 +1,27 @@
-export interface IReservation{
-  id: string;
-  fieldId: string;
-  userList: string[];
-  startAt: Date;
-  status: string;
-  price: number;
-}
+import {ReservationId} from "./reservationId";
+import {FieldId} from "../field/fieldId";
+import {ReservationStartAt} from "./reservationStartAt";
+import {ReservationPrice} from "./reservationPrice";
+import {User} from "../user/user";
+
 export class Reservation {
+  _id : ReservationId;
+  fieldId : FieldId;
+  userList: User[];
+  startAt: ReservationStartAt;
+  price : ReservationPrice
 
   constructor(
-    private readonly id: string,
-    private readonly props: IReservation
-    ) {}
+   _id : ReservationId,
+   fieldId : FieldId,
+   userList : User[],
+   startAt : ReservationStartAt,
+   price : ReservationPrice
+    ){
+    this._id = _id;
+    this.fieldId = fieldId;
+    this.userList = userList;
+    this.startAt = startAt;
+    this.price = price
+  }
 }

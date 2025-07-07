@@ -1,19 +1,35 @@
-import {ClubId} from "./clubId";
-import {ClubName} from "./clubName";
-import {ClubAddress} from "./clubAddress";
-import {ClubPhone} from "./clubPhone";
-import {ClubEmail} from "./clubEmail";
+import { ClubId } from "./clubId";
+import { ClubName } from "./clubName";
+import { ClubAddress } from "./clubAddress";
+import { ClubPhone } from "./clubPhone";
+import { ClubEmail } from "./clubEmail";
+import { ClubDescription } from "./clubDescription";
+import { ClubImage } from "./clubImage";
 
-export interface IClub {
-  id?: ClubId;
+export class Club {
+  _id: ClubId;
   name: ClubName;
   address: ClubAddress;
   phone: ClubPhone;
   email: ClubEmail;
-}
-export class Club{
+  description: ClubDescription;
+  image: ClubImage;
+
   constructor(
-    public  readonly id: string,
-    public  readonly props: IClub
-    ){}
+      _id : ClubId,
+      name : ClubName,
+      address : ClubAddress,
+      phone : ClubPhone,
+      email: ClubEmail,
+      description: ClubDescription,
+      image: ClubImage
+    ){
+    this._id = _id;
+    this.name = name;
+    this.address = address;
+    this.phone = phone;
+    this.email = email;
+    this.description = description;
+    this.image = image
+  }
 }
