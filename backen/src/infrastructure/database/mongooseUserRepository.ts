@@ -1,15 +1,15 @@
 // src/infrastructure/database/mongoose.user.repository.ts
-import { UserRepository } from '../../domain/repositories/userRepositoryInterface';
-import { User } from '../../domain/entities/user/user';
-import { UserModel } from 'models/userModel';
-import { UserId } from '../../domain/entities/user/userId';
-import { UserName } from '../../domain/entities/user/userName';
-import { UserEmail } from '../../domain/entities/user/userEmail';
-import { UserPhone } from '../../domain/entities/user/userPhone';
-import { UserPassword } from '../../domain/entities/user/userPassword';
-import { UserBirthDate } from '../../domain/entities/user/userBirthDate';
-import { UserCreateDate } from '../../domain/entities/user/userCreateDate';
-import { UserRol } from '../../domain/entities/user/userRol';
+import {UserRepository} from '../../domain/repositories/userRepositoryInterface';
+import {User} from '../../domain/entities/user/user';
+import {UserModel} from 'models/userModel';
+import {UserId} from '../../domain/entities/user/userId';
+import {UserName} from '../../domain/entities/user/userName';
+import {UserEmail} from '../../domain/entities/user/userEmail';
+import {UserPhone} from '../../domain/entities/user/userPhone';
+import {UserPassword} from '../../domain/entities/user/userPassword';
+import {UserBirthDate} from '../../domain/entities/user/userBirthDate';
+import {UserCreateDate} from '../../domain/entities/user/userCreateDate';
+import {UserRol} from '../../domain/entities/user/userRol';
 
 export class MongooseUserRepository implements UserRepository {
   async createUser(user: User): Promise<User> {
@@ -42,20 +42,7 @@ export class MongooseUserRepository implements UserRepository {
   }
 
   async getAllUser(): Promise<User[]> {
-    const docs = await UserModel.find().exec();
-
-    return docs.map(doc =>
-      new User(
-        new UserName(doc.name),
-        new UserEmail(doc.email),
-        new UserPhone(doc.phone),
-        new UserPassword(doc.password),
-        new UserBirthDate(doc.birthDate),
-        new UserCreateDate(doc.createDate),
-        new UserRol(doc.role),
-        new UserId(doc._id.toString()),
-      )
-    );
+    return await UserModel.find().exec()
   }
   async findByEmail(email: UserEmail): Promise<User | null> {
     const doc = await UserModel.findOne({ email }).exec();
