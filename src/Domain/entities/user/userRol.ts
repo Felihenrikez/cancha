@@ -1,5 +1,5 @@
 export class UserRol {
-    private static readonly ROLES = ['admin', 'owner', 'user'];
+    private static readonly ROLES = [ 'owner', 'player', 'admin'];
 
     constructor(private readonly value: string) {
         if (!UserRol.ROLES.includes(value)) {

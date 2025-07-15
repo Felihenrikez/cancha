@@ -5,6 +5,11 @@ import morgan from 'morgan'
 import dotenv from 'dotenv';
 import { connectDatabase } from './config/mongooserConfig';
 import userRoutes from './infrastructure/web/routes/userRoutes';
+import clubRoutes from './infrastructure/web/routes/clubRoutes';
+import fieldRoutes from './infrastructure/web/routes/fieldRoutes';
+import scheduleRoutes from './infrastructure/web/routes/scheduleRoutes';
+import reservationRoutes from './infrastructure/web/routes/reservationRoutes';
+import authRoutes from './infrastructure/web/routes/authRoutes';
 
 dotenv.config();
 
@@ -16,15 +21,24 @@ connectDatabase();
 //middlewares
 app.use(express.json());
 app.use(cors());
-//este es para seguridad
 app.use(helmet());
-// para registro
-app.use(morgan('dev'));
+
+// Logging simple
+app.use((req, res, next) => {
+  console.log(`🔥 ${req.method} ${req.url}`);
+  next();
+});
 
 // Rutas
+app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/clubs', clubRoutes);
+app.use('/api/fields', fieldRoutes);
+app.use('/api/schedules', scheduleRoutes);
+app.use('/api/reservations', reservationRoutes);
 
 app.get('/',(req,res) => {
+  console.log('✅ Endpoint raíz accedido');
   res.json({postMessage: 'backen funcionando! '});
 });
 

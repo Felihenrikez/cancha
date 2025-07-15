@@ -3,9 +3,11 @@ export class UserBirthDate {
 
     constructor(value: string) {
         // Validamos que el formato sea una fecha válida
-        if (!this.isValidDateFormat(value)) {
-            throw new Error('Invalid date format. Expected YYYY-MM-DD');
+     /*   if (!this.isValidDateFormat(value)) {
+            throw new Error('Invalid date format. Expected YYYY-MM-DD efe');
         }
+
+      */
 
         const inputDate = new Date(value);
         const today = new Date();

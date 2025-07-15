@@ -58,7 +58,7 @@ export class CreateUserUseCase {
       name: savedUser.name.getValue(),
       email: savedUser.email.getValue(),
       phone: savedUser.phone.getValue(),
-      birthDate: savedUser.birthDate.getValue(),
+      birthDate: savedUser.birthDate.getValue().toISOString(),
       createDate: savedUser.createDate.getValue().toISOString(),
       role: savedUser.role.getValue()
     };

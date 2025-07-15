@@ -44,7 +44,7 @@ const userSchema = new Schema<IUserModel>({
   role: {
     type: String,
     required: true,
-    enum: ['player', 'owner'], // Valores permitidos
+    enum: ['player', 'owner', 'admin'], // Valores permitidos
   },
 }, { timestamps: true });
 

@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import { UserRepository } from '../../Domain/repositories/userRepositoryInterface';
 import { User } from '../../Domain/entities/user/user';
 import { UserName} from "../../Domain/entities/user/UserName";
@@ -27,11 +28,14 @@ export class UserService {
       throw new Error('User with that email already exists');
     }
 
+    // Hashear contraseña
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+
     const user = new User(
       new UserName(userData.name),
       userEmail,
       new UserPhone(userData.phone),
-      new UserPassword(userData.password),
+      new UserPassword(hashedPassword),
       new UserBirthDate(userData.birthDate),
       new UserCreateDate(new Date()),
       new UserRol(userData.role)
