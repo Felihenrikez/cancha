@@ -8,6 +8,7 @@ interface IReservationModel extends Document {
   startHour: string;
   paymentType?: string;
   price: number;
+  membersList?: { name: string; number: string; confirmation: boolean }[];
 }
 
 const reservationSchema = new Schema<IReservationModel>({
@@ -44,6 +45,24 @@ const reservationSchema = new Schema<IReservationModel>({
     required: true,
     min: 0,
   },
+  membersList: [{
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    number: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    confirmation: {
+      type: String,
+      required: true,
+      enum: ['pending', 'confirmed', 'rejected'],
+      default: 'pending',
+    }
+  }],
 }, { timestamps: true });
 
 export const ReservationModel: Model<IReservationModel> =

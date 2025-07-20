@@ -17,7 +17,8 @@ router.post('/', async (req, res) => {
       dateReservation: reservation.dateReservation.getValue(),
       startHour: reservation.startHour.getValue(),
       price: reservation.price.getValue(),
-      paymentType: reservation.paymentType?.getValue()
+      paymentType: reservation.paymentType?.getValue(),
+      membersList: reservation.membersList?.getValue()
     });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
@@ -35,7 +36,8 @@ router.get('/', async (_req, res) => {
       dateReservation: reservation.dateReservation.getValue(),
       startHour: reservation.startHour.getValue(),
       price: reservation.price.getValue(),
-      paymentType: reservation.paymentType?.getValue()
+      paymentType: reservation.paymentType?.getValue(),
+      membersList: reservation.membersList?.getValue()
     })));
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -55,8 +57,23 @@ router.get('/:id', async (req, res) => {
       dateReservation: reservation.dateReservation.getValue(),
       startHour: reservation.startHour.getValue(),
       price: reservation.price.getValue(),
-      paymentType: reservation.paymentType?.getValue()
+      paymentType: reservation.paymentType?.getValue(),
+      membersList: reservation.membersList?.getValue()
     });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  try {
+    const updateRequest = {
+      id: req.params.id,
+      ...req.body
+    };
+    
+    const result = await reservationService.updateReservation(updateRequest);
+    res.json(result);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }

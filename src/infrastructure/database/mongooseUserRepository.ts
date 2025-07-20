@@ -86,6 +86,22 @@ export class MongooseUserRepository implements UserRepository {
     );
   }
 
+  async findByPhone(phone: string): Promise<User | null> {
+    const doc = await UserModel.findOne({ phone }).exec();
+    if (!doc) return null;
+
+    return new User(
+      new UserName(doc.name),
+      new UserEmail(doc.email),
+      new UserPhone(doc.phone),
+      new UserPassword(doc.password),
+      new UserBirthDate(doc.birthDate),
+      new UserCreateDate(new Date(doc.createDate)),
+      new UserRol(doc.role),
+      new UserId((doc._id as any).toString())
+    );
+  }
+
   async update(user: User): Promise<User> {
     if (!user._id) {
       throw new Error('User ID is required for update');

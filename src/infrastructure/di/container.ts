@@ -3,18 +3,21 @@ import { ClubRepository } from '../../Domain/repositories/clubRepositoryInterfac
 import { FieldRepository } from '../../Domain/repositories/fieldRepositoryInterface';
 import { ScheduleRepository } from '../../Domain/repositories/scheduleRepositoryInterface';
 import { ReservationRepository } from '../../Domain/repositories/reservationRepositoryInterface';
+import { AlertRepository } from '../../Domain/repositories/alertRepositoryInterface';
 
 import { MongooseUserRepository } from '../database/mongooseUserRepository';
 import { MongooseClubRepository } from '../database/mongooseClubRepository';
 import { MongooseFieldRepository } from '../database/mongooseFieldRepository';
 import { MongooseScheduleRepository } from '../database/mongooseScheduleRepository';
 import { MongooseReservationRepository } from '../database/mongooseReservationRepository';
+import { MongooseAlertRepository } from '../database/mongooseAlertRepository';
 
 import { UserService } from '../../application/services/userService';
 import { ClubService } from '../../application/services/clubService';
 import { FieldService } from '../../application/services/fieldService';
 import { ScheduleService } from '../../application/services/scheduleService';
 import { ReservationService } from '../../application/services/reservationService';
+import { AlertService } from '../../application/services/alertService';
 import { AuthService } from '../../application/services/authService';
 
 export class Container {
@@ -24,12 +27,14 @@ export class Container {
   private fieldRepository: FieldRepository;
   private scheduleRepository: ScheduleRepository;
   private reservationRepository: ReservationRepository;
+  private alertRepository: AlertRepository;
   
   private userService: UserService;
   private clubService: ClubService;
   private fieldService: FieldService;
   private scheduleService: ScheduleService;
   private reservationService: ReservationService;
+  private alertService: AlertService;
   private authService: AuthService;
 
   private constructor() {
@@ -39,13 +44,15 @@ export class Container {
     this.fieldRepository = new MongooseFieldRepository();
     this.scheduleRepository = new MongooseScheduleRepository();
     this.reservationRepository = new MongooseReservationRepository();
+    this.alertRepository = new MongooseAlertRepository();
     
     // Inicializar servicios
     this.userService = new UserService(this.userRepository);
     this.clubService = new ClubService(this.clubRepository);
     this.fieldService = new FieldService(this.fieldRepository, this.clubRepository);
     this.scheduleService = new ScheduleService(this.scheduleRepository);
-    this.reservationService = new ReservationService(this.reservationRepository);
+    this.reservationService = new ReservationService(this.reservationRepository, this.scheduleRepository, this.alertRepository, this.userRepository);
+    this.alertService = new AlertService(this.alertRepository, this.userRepository, this.reservationRepository);
     this.authService = new AuthService(this.userRepository);
   }
 
@@ -74,6 +81,10 @@ export class Container {
 
   public getReservationService(): ReservationService {
     return this.reservationService;
+  }
+
+  public getAlertService(): AlertService {
+    return this.alertService;
   }
 
   public getAuthService(): AuthService {

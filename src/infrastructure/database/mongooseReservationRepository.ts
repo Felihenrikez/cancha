@@ -7,6 +7,7 @@ import { ReservationDateReservation } from '../../Domain/entities/reservation/re
 import { ReservationStartHour } from '../../Domain/entities/reservation/reservationStartHour';
 import { ReservationPrice } from '../../Domain/entities/reservation/reservationPrice';
 import { ReservationPaymentType } from '../../Domain/entities/reservation/reservationPaymentType';
+import { ReservationMembersList, Member, MemberConfirmationStatus } from '../../Domain/entities/reservation/reservationMembersList';
 import { ScheduleId } from '../../Domain/entities/schedule/scheduleId';
 import { UserId } from '../../Domain/entities/user/userId';
 
@@ -19,7 +20,8 @@ export class MongooseReservationRepository implements ReservationRepository {
       dateReservation: reservation.dateReservation.getValue(),
       startHour: reservation.startHour.getValue(),
       price: reservation.price.getValue(),
-      paymentType: reservation.paymentType?.getValue()
+      paymentType: reservation.paymentType?.getValue(),
+      membersList: reservation.membersList?.getValue()
     };
     
     const created = await ReservationModel.create(data);
@@ -32,6 +34,7 @@ export class MongooseReservationRepository implements ReservationRepository {
       reservation.startHour,
       reservation.price,
       reservation.paymentType,
+      reservation.membersList,
       new ReservationId((created._id as any).toString())
     );
   }
@@ -48,6 +51,7 @@ export class MongooseReservationRepository implements ReservationRepository {
       new ReservationStartHour(doc.startHour),
       new ReservationPrice(doc.price),
       doc.paymentType ? new ReservationPaymentType(doc.paymentType) : undefined,
+      doc.membersList ? new ReservationMembersList(this.convertMembersList(doc.membersList)) : undefined,
       new ReservationId((doc._id as any).toString())
     );
   }
@@ -62,6 +66,7 @@ export class MongooseReservationRepository implements ReservationRepository {
       new ReservationStartHour(doc.startHour),
       new ReservationPrice(doc.price),
       doc.paymentType ? new ReservationPaymentType(doc.paymentType) : undefined,
+      doc.membersList ? new ReservationMembersList(this.convertMembersList(doc.membersList)) : undefined,
       new ReservationId((doc._id as any).toString())
     ));
   }
@@ -76,6 +81,7 @@ export class MongooseReservationRepository implements ReservationRepository {
       new ReservationStartHour(doc.startHour),
       new ReservationPrice(doc.price),
       doc.paymentType ? new ReservationPaymentType(doc.paymentType) : undefined,
+      doc.membersList ? new ReservationMembersList(this.convertMembersList(doc.membersList)) : undefined,
       new ReservationId((doc._id as any).toString())
     ));
   }
@@ -90,6 +96,7 @@ export class MongooseReservationRepository implements ReservationRepository {
       new ReservationStartHour(doc.startHour),
       new ReservationPrice(doc.price),
       doc.paymentType ? new ReservationPaymentType(doc.paymentType) : undefined,
+      doc.membersList ? new ReservationMembersList(this.convertMembersList(doc.membersList)) : undefined,
       new ReservationId((doc._id as any).toString())
     ));
   }
@@ -106,7 +113,8 @@ export class MongooseReservationRepository implements ReservationRepository {
         dateReservation: reservation.dateReservation.getValue(),
         startHour: reservation.startHour.getValue(),
         price: reservation.price.getValue(),
-        paymentType: reservation.paymentType?.getValue()
+        paymentType: reservation.paymentType?.getValue(),
+        membersList: reservation.membersList?.getValue()
       },
       { new: true }
     ).exec();
@@ -121,6 +129,7 @@ export class MongooseReservationRepository implements ReservationRepository {
       new ReservationStartHour(updated.startHour),
       new ReservationPrice(updated.price),
       updated.paymentType ? new ReservationPaymentType(updated.paymentType) : undefined,
+      updated.membersList ? new ReservationMembersList(this.convertMembersList(updated.membersList)) : undefined,
       new ReservationId((updated._id as any).toString())
     );
   }
@@ -128,5 +137,29 @@ export class MongooseReservationRepository implements ReservationRepository {
   async delete(id: ReservationId): Promise<void> {
     const result = await ReservationModel.findByIdAndDelete(id.getValue()).exec();
     if (!result) throw new Error('Reservation not found');
+  }
+
+  // Método auxiliar para convertir el tipo de confirmation
+  private convertMembersList(membersList: any[]): Member[] {
+    return membersList.map(member => ({
+      name: member.name,
+      number: member.number,
+      confirmation: this.convertConfirmation(member.confirmation)
+    }));
+  }
+
+  private convertConfirmation(confirmation: any): MemberConfirmationStatus {
+    if (typeof confirmation === 'string') {
+      if (['pending', 'confirmed', 'rejected'].includes(confirmation)) {
+        return confirmation as MemberConfirmationStatus;
+      }
+    }
+    
+    // Si es boolean o cualquier otro valor, convertir a string
+    if (confirmation === true) {
+      return 'confirmed';
+    }
+    
+    return 'pending';
   }
 }

@@ -8,17 +8,8 @@ const reservationService = container.getReservationService();
 
 router.post('/', async (req, res) => {
   try {
-    const reservation = await reservationService.createReservation(req.body);
-    res.status(201).json({
-      id: reservation._id?.getValue(),
-      scheduleId: reservation.scheduleId.getValue(),
-      userId: reservation.userId.getValue(),
-      state: reservation.state.getValue(),
-      dateReservation: reservation.dateReservation.getValue(),
-      startHour: reservation.startHour.getValue(),
-      price: reservation.price.getValue(),
-      paymentType: reservation.paymentType?.getValue()
-    });
+    const result = await reservationService.createReservation(req.body);
+    res.status(201).json(result);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
@@ -26,17 +17,8 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (_req, res) => {
   try {
-    const reservations = await reservationService.getAllReservation();
-    res.json(reservations.map(reservation => ({
-      id: reservation._id?.getValue(),
-      scheduleId: reservation.scheduleId.getValue(),
-      userId: reservation.userId.getValue(),
-      state: reservation.state.getValue(),
-      dateReservation: reservation.dateReservation.getValue(),
-      startHour: reservation.startHour.getValue(),
-      price: reservation.price.getValue(),
-      paymentType: reservation.paymentType?.getValue()
-    })));
+    const result = await reservationService.getAllReservation();
+    res.json(result);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
   }
@@ -55,7 +37,8 @@ router.get('/:id', async (req, res) => {
       dateReservation: reservation.dateReservation.getValue(),
       startHour: reservation.startHour.getValue(),
       price: reservation.price.getValue(),
-      paymentType: reservation.paymentType?.getValue()
+      paymentType: reservation.paymentType?.getValue(),
+      membersList: reservation.membersList?.getValue()
     });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
@@ -73,7 +56,8 @@ router.get('/user/:userId', async (req, res) => {
       dateReservation: reservation.dateReservation.getValue(),
       startHour: reservation.startHour.getValue(),
       price: reservation.price.getValue(),
-      paymentType: reservation.paymentType?.getValue()
+      paymentType: reservation.paymentType?.getValue(),
+      membersList: reservation.membersList?.getValue()
     })));
   } catch (error: any) {
     res.status(400).json({ error: error.message });
@@ -91,8 +75,36 @@ router.get('/schedule/:scheduleId', async (req, res) => {
       dateReservation: reservation.dateReservation.getValue(),
       startHour: reservation.startHour.getValue(),
       price: reservation.price.getValue(),
-      paymentType: reservation.paymentType?.getValue()
+      paymentType: reservation.paymentType?.getValue(),
+      membersList: reservation.membersList?.getValue()
     })));
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  try {
+    const updateRequest = {
+      id: req.params.id,
+      ...req.body
+    };
+    
+    const result = await reservationService.updateReservation(updateRequest);
+    res.json(result);
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+router.post('/bulk', async (req, res) => {
+  try {
+    if (!Array.isArray(req.body)) {
+      return res.status(400).json({ error: 'Request body must be an array of reservations' });
+    }
+
+    const result = await reservationService.createBulkReservations(req.body);
+    res.status(201).json(result);
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }

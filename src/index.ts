@@ -9,6 +9,7 @@ import clubRoutes from './infrastructure/web/routes/clubRoutes';
 import fieldRoutes from './infrastructure/web/routes/fieldRoutes';
 import scheduleRoutes from './infrastructure/web/routes/scheduleRoutes';
 import reservationRoutes from './infrastructure/web/routes/reservationRoutes';
+import alertRoutes from './infrastructure/web/routes/alertRoutes';
 import authRoutes from './infrastructure/web/routes/authRoutes';
 
 dotenv.config();
@@ -19,15 +20,10 @@ const app = express();
 connectDatabase();
 
 //middlewares
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
-
-// Logging simple
-app.use((req, res, next) => {
-  console.log(`🔥 ${req.method} ${req.url}`);
-  next();
-});
 
 // Rutas
 app.use('/api/auth', authRoutes);
@@ -36,9 +32,9 @@ app.use('/api/clubs', clubRoutes);
 app.use('/api/fields', fieldRoutes);
 app.use('/api/schedules', scheduleRoutes);
 app.use('/api/reservations', reservationRoutes);
+app.use('/api/alerts', alertRoutes);
 
 app.get('/',(req,res) => {
-  console.log('✅ Endpoint raíz accedido');
   res.json({postMessage: 'backen funcionando! '});
 });
 
