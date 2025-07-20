@@ -9,7 +9,7 @@
     "build": "tsc",
     "postinstall": "npm run build",
     "watch": "nodemon --exec ts-node src/index.ts",
-    "clean": "rm -rf dist",
+    "clean": "if exist dist rmdir /s /q dist",
     "prebuild": "npm run clean"
   },
   "keywords": [],
